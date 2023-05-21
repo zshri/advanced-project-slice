@@ -1,0 +1,53 @@
+server:
+  port: 8085
+  servlet:
+    context-path: /blog
+
+spring:
+  application.name: blog-service
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/common-db
+    username: sa
+    password: 12
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    show-sql: true
+    properties:
+      hibernate.format_sql: true
+    hibernate:
+      ddl-auto: create-drop
+    defer-datasource-initialization: true
+
+  sql:
+    init:
+      mode: always
+
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:8081/auth/realms/advanced-project-realm
+
+
+
+
+
+
+management:
+
+  endpoints:
+    web:
+      exposure:
+        include: health,prometheus
+
+  metrics:
+    export:
+      prometheus:
+        enabled: true
+    distribution:
+      percentiles-histogram:
+        "[http.server.requests]": true
+

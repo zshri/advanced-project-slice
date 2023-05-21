@@ -1,0 +1,58 @@
+version: '3'
+
+services:
+
+  common-service-postgres:
+    container_name: postgres-common
+    image: postgres:14-alpine
+    volumes:
+      - ./common-postgres-data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: common-db
+      POSTGRES_USER: sa
+      POSTGRES_PASSWORD: 12
+    ports:
+      - 5432:5432
+
+  keycloak:
+    image: quay.io/keycloak/keycloak:19.0
+    container_name: keycloak
+    environment:
+      #      KC_DB: postgres
+      #      KC_DB_URL: jdbc:mysql://localhost:5433/keycloak
+      #      KC_DB_USERNAME: keycloak
+      #      KC_DB_PASSWORD: password
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin
+    ports:
+      - 8081:8081
+    volumes:
+      - ./service-cloud/keycloak/conf:/opt/keycloak/conf
+      - ./service-cloud/keycloak/realms:/opt/keycloak/data/import/
+      - ./service-cloud/keycloak/themes:/opt/keycloak/themes
+    entrypoint: "/opt/keycloak/bin/kc.sh start-dev --import-realm --features scripts --http-relative-path=/auth --http-port=8081"
+
+#  postgres:
+#    image: postgres
+#    volumes:
+#      - postgres_data:/var/lib/postgresql/data
+#    environment:
+#      POSTGRES_DB: keycloak
+#      POSTGRES_USER: keycloak
+#      POSTGRES_PASSWORD: password
+#    ports:
+#      - 5433:5433
+
+
+
+volumes:
+  postgres_data:
+    driver: local
+  common-postgres-data:
+    driver: local
+
+
+
+
+
+
