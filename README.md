@@ -6,7 +6,7 @@ Run script
    (wait keycloak updating the configuration)
 2) run gateway
 3) run blog-service
-
-
-http://localhost:8083/blog/posts
+4) go to http://localhost:8083/blog/posts
+5) login
+6) see data
 
