@@ -1,0 +1,43 @@
+
+
+spring:
+
+
+  datasource:
+    url: jdbc:postgresql://localhost:5434/blog-db
+    username: sa
+    password: 12
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    show-sql: true
+    hibernate:
+      ddl-auto: create
+#    properties:
+#      hibernate:
+#        default_schema: schema_dev
+
+
+#spring:
+#  profiles:
+#    active: dev
+#---
+#spring:
+#  profiles: dev
+#  r2dbc:
+#    url: r2dbc:postgresql://localhost:5432/test
+#    username: postgres
+#    password: postgres
+#logging:
+#  level:
+#    org.springframework.data.r2dbc: Debug
+#---
+#spring:
+#  r2dbc:
+#    url: r2dbc:h2:mem:///test?options=DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+#    name: sa
+#    password:
+#  config:
+#    activate:
+#      on-profile:

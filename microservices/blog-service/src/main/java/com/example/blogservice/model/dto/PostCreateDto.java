@@ -1,6 +1,7 @@
 package com.example.blogservice.model.dto;
 
 import com.example.blogservice.model.PostStatus;
+import com.example.blogservice.util.CustomerTypeSubset;
 import com.example.blogservice.util.EnumNamePattern;
 import lombok.*;
 
@@ -24,7 +25,7 @@ public class PostCreateDto {
     @NotEmpty(message = "Post content empty")
     private String content;
 
-//    @EnumNamePattern(regexp = "SAVE|PUBLISH|DELETE") //todo валидация довести до ума!
+    @EnumNamePattern(regexp = "SAVE|PUBLISH|DELETE") //todo валидация довести до ума!
 //    @CustomerTypeSubset(anyOf = {PostStatus.SAVE, PostStatus.PUBLISH, PostStatus.DELETE})
     private PostStatus postStatus;
 

@@ -1,0 +1,117 @@
+package com.example.blogservice.controller;
+
+import com.example.blogservice.model.Post;
+import com.example.blogservice.model.PostStatus;
+import com.example.blogservice.model.dto.PostResponseDto;
+import com.example.blogservice.service.PostService;
+import org.jetbrains.annotations.NotNull;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+
+import java.time.Instant;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+
+@ExtendWith(MockitoExtension.class) // включен в вебмвстест
+@WebMvcTest
+//@TestPropertySource(
+//        locations = "classpath:application-integrationtest.properties")
+//@DisplayName("UserController Adapter Test")
+//@WebMvcTest(UserController.class)
+//@AutoConfigureMockMvc(addFilters = false)
+//@Import(TestConfig.class)
+class PostControllerTest {
+
+    @Autowired
+    private MockMvc mockMvc;
+
+    @MockBean
+    private PostService postService;
+
+    @InjectMocks
+    private PostController postController;
+
+    private Post post;
+
+    @BeforeEach
+    public void setup() {
+
+        post = new Post(
+                "PostControllerTest",
+                "PostControllerTest",
+                PostStatus.SAVE,
+                Instant.now(),
+                null,
+                "principal"
+        );
+
+        mockMvc = MockMvcBuilders.standaloneSetup(postController).build();
+    }
+
+    @AfterEach
+    void tearDown() {
+        post = null;
+    }
+
+
+    @Test
+    void createPost() throws Exception {
+        when(postService.save(any(),any())).thenReturn(post);
+        mockMvc.perform(get("/blog/posts")).andExpect(status().isOk());
+        verify(postService, times(1)).save(any(), any());
+    }
+
+
+    @Test
+    void testTest() {
+        assertEquals(Float.NaN, 0f / 0);
+
+        System.out.println(0f / 0);
+        System.out.println(0d / 0);
+
+        assertEquals(Double.NaN, 0d / 0);
+
+    }
+
+
+//    @Test
+//    public void PostMappingOfProduct() throws Exception{
+//        when(productService.addProduct(any())).thenReturn(product);
+//        mockMvc.perform(post("/api/v1/product").
+//                        contentType(MediaType.APPLICATION_JSON).
+//                        content(asJsonString(product))).
+//                andExpect(status().isCreated());
+//        verify(productService,times(1)).addProduct(any());
+//    }
+
+
+//    @Test
+//    public void giventUrl_whenGetRequest_thenFindGetResponse()
+//            throws Exception {
+//
+//        MockHttpServletRequestBuilder builder = MockMvcRequestBuilders
+//                .get("/get");
+//
+//        ResultMatcher contentMatcher = MockMvcResultMatchers.content()
+//                .string("GET Response");
+//
+//        this.mockMvc.perform(builder).andExpect(contentMatcher)
+//                .andExpect(MockMvcResultMatchers.status().isOk());
+//
+//    }
+}

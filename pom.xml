@@ -2,7 +2,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>zshri</groupId>
+  <groupId>hshri</groupId>
   <artifactId>advanced-project</artifactId>
   <version>0.0.2-SNAPSHOT</version>
   <name>advanced-project</name>
@@ -16,6 +16,15 @@
   <modules>
     <module>service-cloud/gateway-client</module>
     <module>microservices/blog-service</module>
+    <module>microservices/profile-service</module>
+    <module>microservices/notification-service</module>
+    <module>microservices/shop-service</module>
+    <module>microservices/shop-service/order-service</module>
+    <module>microservices/shop-service/inventory-service</module>
+    <module>microservices/shop-service/catalog-service</module>
+    <module>lessons/hibernate-lesson</module>
+
+
   </modules>
 
 </project>

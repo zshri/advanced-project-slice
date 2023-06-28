@@ -14,6 +14,18 @@ public class GatewayClientApplication {
         SpringApplication.run(GatewayClientApplication.class, args);
     }
 
-
+//    @Bean
+//    public RouteLocator customRouteLocator(RouteLocatorBuilder builder) {
+//        return builder.routes()
+//                .route("path_route", r -> r.path("/messages")
+//                        .filters(GatewayFilterSpec::tokenRelay)
+//                        .uri("http://localhost:8082/messages")
+//
+//                ).route("blog", r -> r.path("/blog")
+//                        .filters(GatewayFilterSpec::tokenRelay)
+//                        .uri("http://localhost:8085/main")
+//                )
+//                .build();
+//    }
 
 }

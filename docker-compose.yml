@@ -1,12 +1,29 @@
 version: '3'
 
+volumes:
+  postgres_data:
+    driver: local
+  common-postgres-data:
+    driver: local
+
 services:
+
+#  gateway:
+#    build: './service-cloud/gateway-client'
+
+#  blog-service:
+#    container_name: blog-service
+#    build:
+#        context: ./microservices/blog-service
+#    image: blog-service:latest
+#    ports:
+#        - 8085:8085
 
   common-service-postgres:
     container_name: postgres-common
     image: postgres:14-alpine
     volumes:
-      - ./common-postgres-data:/var/lib/postgresql/data
+      - .volumes/postgres-data:/var/lib/postgresql/data
     environment:
       POSTGRES_DB: common-db
       POSTGRES_USER: sa
@@ -14,45 +31,79 @@ services:
     ports:
       - 5432:5432
 
-  keycloak:
-    image: quay.io/keycloak/keycloak:19.0
-    container_name: keycloak
+  mysql:
+    image: mysql
+    restart: always
+    ports:
+      - 3306:3306
     environment:
-      #      KC_DB: postgres
-      #      KC_DB_URL: jdbc:mysql://localhost:5433/keycloak
-      #      KC_DB_USERNAME: keycloak
-      #      KC_DB_PASSWORD: password
-      KEYCLOAK_ADMIN: admin
-      KEYCLOAK_ADMIN_PASSWORD: admin
+      MYSQL_DATABASE: moviecatalog
+      MYSQL_ROOT_USER: root
+      MYSQL_ROOT_PASSWORD: root
+#      MYSQL_ALLOW_EMPTY_PASSWORD
+#      MYSQL_RANDOM_ROOT_PASSWORD: root
+
+  mongo:
+    image: mongo
+    restart: always
+    ports:
+      - 27017:27017
+    volumes:
+      - .volumes/mongo-db/:/data/db
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
+
+  mongo-express:
+    image: mongo-express
+    restart: always
     ports:
       - 8081:8081
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: root
+      ME_CONFIG_MONGODB_ADMINPASSWORD: example
+      ME_CONFIG_MONGODB_URL: mongodb://root:example@mongo:27017/
+
+
+  sonarqube:
+    image: sonarqube:9.9.0-community
+    ports:
+      - '9000:9000'
+
+
+
+#  kafka-server
+
+  zookeeper:
+    image: wurstmeister/zookeeper
+    ports:
+      - "2181:2181"
+  kafka:
+    image: wurstmeister/kafka
+    ports:
+      - "9092:9092"
+    depends_on:
+      - zookeeper
+    environment:
+      KAFKA_ADVERTISED_HOST_NAME: kafka
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_CFG_ZOOKEEPER_CONNECT: zookeeper:2181
+      ALLOW_PLAINTEXT_LISTENER: "yes"
+#      log dirs?
+      KAFKA_CFG_LOG_DIRS: .volumes/kafka/tmp/kafka_mounts/logs
+      KAFKA_CREATE_TOPICS: "transactions:1:2"
     volumes:
-      - ./service-cloud/keycloak/conf:/opt/keycloak/conf
-      - ./service-cloud/keycloak/realms:/opt/keycloak/data/import/
-      - ./service-cloud/keycloak/themes:/opt/keycloak/themes
-    entrypoint: "/opt/keycloak/bin/kc.sh start-dev --import-realm --features scripts --http-relative-path=/auth --http-port=8081"
-
-#  postgres:
-#    image: postgres
-#    volumes:
-#      - postgres_data:/var/lib/postgresql/data
-#    environment:
-#      POSTGRES_DB: keycloak
-#      POSTGRES_USER: keycloak
-#      POSTGRES_PASSWORD: password
-#    ports:
-#      - 5433:5433
-
-
-
-volumes:
-  postgres_data:
-    driver: local
-  common-postgres-data:
-    driver: local
-
-
-
-
-
-
+      - .volumes/kafka/var/run/docker.sock:/var/run/docker.sock
+  kafka-ui:
+    image: provectuslabs/kafka-ui
+    container_name: kafka-ui
+    ports:
+      - "8090:8080"
+    depends_on:
+      - zookeeper
+      - kafka
+    restart: always
+    environment:
+      - KAFKA_CLUSTERS_0_NAME=local
+      - KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS=kafka:9092
+      - KAFKA_CLUSTERS_0_ZOOKEEPER=zookeeper:2181

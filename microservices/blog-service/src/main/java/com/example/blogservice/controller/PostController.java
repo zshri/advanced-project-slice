@@ -5,14 +5,15 @@ import com.example.blogservice.model.Post;
 import com.example.blogservice.model.dto.PostCreateDto;
 import com.example.blogservice.model.dto.PostResponseDto;
 import com.example.blogservice.service.PostService;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -20,139 +21,113 @@ import org.springframework.web.bind.annotation.*;
 
 
 import javax.validation.Valid;
-import java.security.Principal;
 import java.util.HashMap;
 import java.util.Map;
 
+// todo page size limit 10-20 how?
+
+@Slf4j
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping("/posts")
 public class PostController {
-
-    @Autowired
-    PostService postService;
-
-    private final Log log = LogFactory.getLog(getClass());
-//    final String principal = "Principal";
+    private final PostService postService;
+    final String principal = "Principal";
+    public PostController(PostService postService) {
+        this.postService = postService;
+    }
 
     @GetMapping
     public ResponseEntity<?> getPosts(
-            Principal principal,
+//            Principal principal,
 //            @PageableDefault(sort = {"id"}, direction = Sort.Direction.DESC) Pageable pageable,
+//            @ParameterObject Pageable pageable
 //            @RequestParam(defaultValue = "id,desc") String[] sort
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "3") int size
+            @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "3") int size
     ) {
         Pageable pageable = PageRequest.of(page, size, Sort.by("createAt").descending());
         Page<PostResponseDto> postResponseDtoPage = postService.getAll(pageable);
+
         return new ResponseEntity<>(postResponseDtoPage, HttpStatus.OK);
     }
 
     @GetMapping("/publish")
     public ResponseEntity<?> getUserPubPosts(
-            Principal principal,
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "3") int size
+//            Principal principal,
+            @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "3") int size
     ) {
         Pageable pageable = PageRequest.of(page, size, Sort.by("createAt").descending());
-        Page<PostResponseDto> postResponseDtoPage = postService.getAllUserPub(principal.getName() , pageable);
+        Page<PostResponseDto> postResponseDtoPage = postService.getAllUserPub(principal , pageable);
+
         return new ResponseEntity<>(postResponseDtoPage, HttpStatus.OK);
     }
 
     @GetMapping("/save")
     public ResponseEntity<?> getUserSavePosts(
-            Principal principal,
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "3") int size
+//            Principal principal,
+            @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "3") int size
     ) {
         Pageable pageable = PageRequest.of(page, size, Sort.by("createAt").descending());
-        Page<PostResponseDto> postResponseDtoPage = postService.getAllUserSave(principal.getName() , pageable);
+        Page<PostResponseDto> postResponseDtoPage = postService.getAllUserSave(principal , pageable);
+
         return new ResponseEntity<>(postResponseDtoPage, HttpStatus.OK);
     }
 
     @GetMapping("/delete")
     public ResponseEntity<?> getUserDeletePosts(
-            Principal principal,
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "3") int size
+//            Principal principal,
+            @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "3") int size
     ) {
         Pageable pageable = PageRequest.of(page, size, Sort.by("createAt").descending());
-        Page<PostResponseDto> postResponseDtoPage = postService.getAllUserDelete(principal.getName(), pageable);
+        Page<PostResponseDto> postResponseDtoPage = postService.getAllUserDelete(principal, pageable);
+
         return new ResponseEntity<>(postResponseDtoPage, HttpStatus.OK);
     }
 
-
-//    @DeleteMapping
-//    public ResponseEntity<?> clearUserDelPosts(
-////            Principal principal,
-//    ) {
-//        return new ResponseEntity<>( HttpStatus.BAD_REQUEST);
-//    }
-
-
-
-
-
-    @PostMapping
+    @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> createPost(
-            Principal principal,
-            @RequestBody PostCreateDto postCreateDto
-//            @Valid @RequestBody PostCreateDto postCreateDto
+//            Principal principal,
+            @Valid @RequestBody PostCreateDto postCreateDto
     ) {
-        Post savePost = postService.save(principal.getName(), postCreateDto);
+        Post savePost = postService.save(principal, postCreateDto);
         log.info("post create " + savePost.getId() );
+
         return new ResponseEntity<>(savePost, HttpStatus.CREATED);
     }
 
-
     @GetMapping("/{id}")
     public ResponseEntity<?> getPost(
-            Principal principal,
+//            Principal principal,
             @PathVariable Long id
     ) {
-        return postService.getById(principal.getName(), id);
+        return postService.getById(principal, id);
     }
 
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    public Map<String, String> handleValidationExceptions(MethodArgumentNotValidException ex) {
-        Map<String, String> errors = new HashMap<>();
-        ex.getBindingResult().getAllErrors().forEach((error) -> {
-            String fieldName = ((FieldError) error).getField();
-            String errorMessage = error.getDefaultMessage();
-            errors.put(fieldName, errorMessage);
-        });
-        return errors;
-    }
-
-
-
-    @PutMapping("/{id}")
+    @PutMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> updatePost(
-            Principal principal,
+//            Principal principal,
             @PathVariable Long id,
             @Valid @RequestBody PostCreateDto postCreateDto
     ) {
-        return postService.update(principal.getName(), id, postCreateDto);
+        return postService.update(principal, id, postCreateDto);
     }
-
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deletePost(
-            Principal principal,
+//            Principal principal,
             @PathVariable Long id
     ) {
-        return postService.delete(principal.getName(), id);
+        return postService.delete(principal, id);
     }
 
+    @GetMapping("/{postId}/like")
+    public ResponseEntity<?> likePost(
+//            Principal principal,
+            @PathVariable Long postId
+    ) {
+        log.info("post like  " + postId );
 
-//    @GetMapping("/{id}/like")
-//    public ResponseEntity<?> likePost(@PathVariable Long id) {
-//
-//        String string = "like " + id;
-//    return new ResponseEntity<>(string, HttpStatus.OK) ;
-//}
-//postService.findByPostId(postId)
-//            .map(ResponseEntity::ok)
-//            .orElseGet(() -> ResponseEntity.notFound().build());
+        return postService.likePost(principal, postId);
+    }
 
 }

@@ -6,11 +6,7 @@ import com.example.blogservice.model.dto.PostCreateDto;
 import com.example.blogservice.model.dto.PostResponseDto;
 import com.example.blogservice.model.exception.NotFoundResourceEx;
 import com.example.blogservice.repository.PostRepository;
-import com.sun.jdi.event.ExceptionEvent;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -24,14 +20,20 @@ import java.time.Instant;
 @Slf4j
 public class PostService {
 
-    @Autowired
-    PostRepository postRepository;
+    private final PostRepository postRepository;
+
+    public PostService(PostRepository postRepository) {
+        this.postRepository = postRepository;
+    }
 
 
     public ResponseEntity<?> getById(String principal , Long id) throws NotFoundResourceEx {
 
         // todo протестировать
-        Post post = postRepository.findById(id).orElseThrow(() -> new NotFoundResourceEx("not found")); // todo откуда он берет ошибку?
+        Post post = postRepository.findById(id)
+                .orElseThrow(() -> new NotFoundResourceEx("not found")); // todo откуда он берет ошибку?
+
+//        post.setCommentList(null);
 
         String principal2 = "principal2"; //todo del str
 
@@ -59,8 +61,6 @@ public class PostService {
                 .author(principal)
                 .build();
 
-
-
         return postRepository.save(post);
     }
 
@@ -86,27 +86,35 @@ public class PostService {
 
         if (post.getAuthor().equals(principal)) {
             postRepository.deleteById(id);
-            return new ResponseEntity<>(post, HttpStatus.OK) ;
+// todo странная особенность, когда в режиме дебагера отдавал пост нормально а так нет, заменил на строку
+            return new ResponseEntity<>("успешно удален", HttpStatus.OK) ;
         } return new ResponseEntity<>(HttpStatus.LOCKED);
     }
 
 
+    public ResponseEntity<?> likePost(String principal, Long id){
+        Post post = postRepository.findById(id).orElseThrow(() -> new NotFoundResourceEx("not found"));
+        if (post.getPostStatus().equals(PostStatus.PUBLISH)) {
+            post.switchLike(principal);
+            postRepository.save(post);
+            return new ResponseEntity<>(HttpStatus.OK) ;
+        }
+        return new ResponseEntity<>(HttpStatus.LOCKED);
+    }
 
-
-    public PostResponseDto convertToPostResponseDto(final Post post){
+    private PostResponseDto convertToPostResponseDto(final Post post){
 
         return PostResponseDto.builder()
                 .id(post.getId())
                 .title(post.getTitle())
-//                .content(post.getContent().substring(0, 2)) // if (post.getContent()
+//                .content(post.getContent().substring(0, 2)) // if (post.getContent() crjkmrj cbvdjkjd
                 .content(post.getContent())
                 .postStatus(post.getPostStatus())
                 .createAt(post.getCreateAt())
                 .updateAt(post.getUpdateAt())
+                .likes(post.getLikes())
                 .author(post.getAuthor()).build();
     }
-
-
 
 
 //    todo Refactor methods
@@ -166,6 +174,9 @@ public class PostService {
 
         return postResponseDtoPage;
     }
+
+
+
 
 
 }

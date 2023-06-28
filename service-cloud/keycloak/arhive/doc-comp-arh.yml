@@ -1,0 +1,100 @@
+version: '3'
+
+volumes:
+  postgres_data:
+    driver: local
+
+services:
+
+  # В настройках реалма лежат коды доступа если что
+  keycloak:
+    image: quay.io/keycloak/keycloak:19.0
+    environment:
+      #      KC_DB: mysql
+      #      KC_DB_URL: jdbc:mysql://cp-keycloak-database:3306/keycloak
+      #      KC_DB_USERNAME: root
+      #      KC_DB_PASSWORD: root
+      #      KC_HOSTNAME: localhost
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin
+    ports:
+      - 8081:8080
+    volumes:
+      - ./conf:/opt/keycloak/conf
+      - ./realms:/opt/keycloak/data/import/
+      - ./themes:/opt/keycloak/themes
+    entrypoint: "/opt/keycloak/bin/kc.sh start-dev --import-realm --features scripts --http-relative-path=/auth"
+
+
+#  postgres:
+#    image: postgres
+#    volumes:
+#      - postgres_data:/var/lib/postgresql/data
+#    environment:
+#      POSTGRES_DB: keycloak
+#      POSTGRES_USER: keycloak
+#      POSTGRES_PASSWORD: password
+#    ports:
+#      - 5432:5432
+#
+
+
+
+#  keycloak:
+#    image: quay.io/keycloak/keycloak:legacy
+#    environment:
+#      DB_VENDOR: POSTGRES
+#      DB_ADDR: postgres
+#      DB_DATABASE: keycloak
+#      DB_USER: keycloak
+#      DB_SCHEMA: public
+#      DB_PASSWORD: password
+#      #      KEYCLOAK_HOSTNAME: keycloak-auth
+#      KEYCLOAK_USER: admin
+#      KEYCLOAK_PASSWORD: Pa55w0rd
+#        # Uncomment the line below if you want to specify JDBC parameters. The parameter below is just an example, and it shouldn't be used in production without knowledge. It is highly recommended that you read the PostgreSQL JDBC driver documentation in order to use it.
+#      #JDBC_PARAMS: "ssl=true"
+#    ports:
+#      - 8081:8080
+#    depends_on:
+#      - postgres
+
+#
+#  keycloak11:
+#    image: quay.io/keycloak/keycloak:legacy
+#    environment:
+#      DB_VENDOR: POSTGRES
+#      DB_ADDR: postgres
+#      DB_DATABASE: keycloak
+#      DB_USER: keycloak
+#      DB_SCHEMA: public
+#      DB_PASSWORD: password
+#      #      KEYCLOAK_HOSTNAME: keycloak-auth
+#      KEYCLOAK_USER: admin
+#      KEYCLOAK_PASSWORD: Pa55w0rd
+#        # Uncomment the line below if you want to specify JDBC parameters. The parameter below is just an example, and it shouldn't be used in production without knowledge. It is highly recommended that you read the PostgreSQL JDBC driver documentation in order to use it.
+#      #JDBC_PARAMS: "ssl=true"
+##    volumes:
+##      - ./realms:/opt/keycloak/data/import/
+##    entrypoint: "/opt/keycloak/bin/kc.sh start-dev --import-realm"
+#    ports:
+#      - 8081:8080
+#    depends_on:
+#      - postgres
+
+
+
+#  keycloak21:
+#    build:
+#      context: .
+#      dockerfile: Dockerfile2
+#    environment:
+#      KEYCLOAK_ADMIN: admin
+#      KEYCLOAK_ADMIN_PASSWORD: admin
+#    container_name: keycloak21
+#    volumes:
+#      - ./conf:/opt/keycloak/conf
+#      - ./realms:/opt/keycloak/data/import
+#      - ./themes:/opt/keycloak/themes
+#    ports:
+#      - 8082:8080
