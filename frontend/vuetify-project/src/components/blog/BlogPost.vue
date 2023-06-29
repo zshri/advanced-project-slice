@@ -35,13 +35,12 @@ import {defineProps, onBeforeMount, onMounted, ref, watch} from "vue";
 import BlogPostComments from "@/components/blog/BlogPostComments.vue";
 
 const { post, loading, error } = storeToRefs(useBlogStore())
-const { getPost, getComments } = useBlogStore()
+const { getPost } = useBlogStore()
 
 const route = useRoute()
 const id = Number(route.params.id);
 console.log(id)
 getPost(id)
-getComments(id)
 
 // onMounted(() => {
 //   console.log(id)

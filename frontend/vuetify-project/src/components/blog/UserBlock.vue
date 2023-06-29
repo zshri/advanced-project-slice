@@ -4,14 +4,14 @@
 
   <p class="user_block_card_btn" >BLOG</p>
 
-  <div><v-btn to="all" block="true" class="user_block_card_btn mrg" @click="">ALL POSTS</v-btn></div>
+  <div><v-btn :to="{ name: 'posts-all'}" block="true" class="user_block_card_btn mrg" @click="">ALL POSTS</v-btn></div>
 
   <p class="user_block_card_btn" >MY POSTS</p>
 
-  <div><v-btn block to="create" class="user_block_card_btn bg-black" variant="outlined" @click="fetchPost">Create</v-btn></div>
-  <div><v-btn to="publish" block class="user_block_card_btn" @click="fetchPost">PUBLISH</v-btn></div>
-  <div><v-btn to="save" block class="user_block_card_btn" @click="fetchPost">SAVE</v-btn></div>
-  <div><v-btn to="delete" block class="user_block_card_btn" @click="fetchPost">DELETE</v-btn></div>
+  <div><v-btn block :to="{ name: 'posts-create'}" class="user_block_card_btn bg-black" variant="outlined" @click="fetchPost">Create</v-btn></div>
+  <div><v-btn :to="{ name: 'posts-pub'}" block class="user_block_card_btn" @click="fetchPost">PUBLISH</v-btn></div>
+  <div><v-btn :to="{ name: 'posts-save'}" block class="user_block_card_btn" @click="fetchPost">SAVE</v-btn></div>
+  <div><v-btn :to="{ name: 'posts-del'}" block class="user_block_card_btn" @click="fetchPost">DELETE</v-btn></div>
 
 </v-card>
 

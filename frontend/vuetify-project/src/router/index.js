@@ -19,32 +19,43 @@ const routes = [
       {
         path: '',
         // redirect: 'blog/all', // default child path
+        name: "posts-main",
         component: PagePosts,
       },
       {
         // при совпадении пути с шаблоном /user/:id/profile
         // в <router-view> компонента User будет показан UserProfile
         path: 'all',
+        name: "posts-all",
         component: PagePosts
       },
       {
         path: 'create',
+        name: "posts-create",
         component: PostCreate
       },
+
+
       {
         path: 'publish',
+        name: "posts-pub",
         component: PagePosts
       },
       {
         path: 'save',
+        name: "posts-save",
         component: PagePostsSave
       },
       {
         path: 'delete',
+        name: "posts-del",
         component: PagePosts
       },
+
+
       {
         path: 'posts/:id',
+        name: "posts",
         component: BlogPost
       },
 

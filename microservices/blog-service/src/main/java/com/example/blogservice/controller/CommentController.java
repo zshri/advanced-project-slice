@@ -34,9 +34,10 @@ public class CommentController {
     @GetMapping("/{postId}")
     public ResponseEntity<?> getComments(
 //            Principal principal,
-            @PathVariable Long postId
+            @PathVariable Long postId,
+            @RequestParam(defaultValue = "0") int page
     ){
-        Pageable pageable = PageRequest.of(0, 10, Sort.by("createAt").descending());
+        Pageable pageable = PageRequest.of(page, 10, Sort.by("createAt").descending());
         Page<Comment> commentPage = commentService.getComments(postId, pageable);
 
         return new ResponseEntity<>(commentPage, HttpStatus.OK);

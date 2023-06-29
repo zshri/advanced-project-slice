@@ -19,8 +19,12 @@
       </div>
 
       <div class="post_footer">
-        <v-btn class="demo_button" @click="setPage(2)" >READ MORE</v-btn>
-        <RouterLink :to="`/posts/${post.id}`">{{ post.id }}</RouterLink>
+        <v-btn class="demo_button"
+               @click="setPage(2)"
+               :to="{ name: 'posts', params: { id: post.id }}"
+        >
+          READ MORE
+        </v-btn>
       </div>
 
     </v-card>

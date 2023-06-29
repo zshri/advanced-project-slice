@@ -6,6 +6,7 @@ export const useBlogStore = defineStore("BlogStore", {
     pagePosts: null,
     post: null,
     comments: null,
+    comment: null,
     loading: false,
     error: null
   }),
@@ -91,6 +92,21 @@ export const useBlogStore = defineStore("BlogStore", {
       this.loading = true
       try {
         this.comments = await fetch(`http://localhost:8085/blog/comments/${id}`)
+          .then((response) => response.json())
+      } catch (error) {
+        this.error = error
+      } finally {
+        this.loading = false
+      }
+    },
+
+    async getCommentsPage(id, page) {
+      this.comments = null
+      this.loading = true
+      try {
+        this.comments = await fetch('http://localhost:8085/blog/comments/${id}?' + new URLSearchParams({
+          page: page
+        }))
           .then((response) => response.json())
       } catch (error) {
         this.error = error

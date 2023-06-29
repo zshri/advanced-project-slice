@@ -32,6 +32,11 @@
 
   </v-card>
 
+  <v-pagination v-if="comments" class="page_pagi"
+                v-model="page"
+                :length="comments.totalPages"
+                @update:modelValue="setPage"
+  />
 
 </template>
 
@@ -41,23 +46,24 @@ import {defineProps, onBeforeMount, onMounted, ref, watch} from "vue";
 import {RouterLink, useRoute} from "vue-router";
 import {storeToRefs} from 'pinia'
 import {useBlogStore} from "@/store/BlogStore";
-
 const {comments, loading, error} = storeToRefs(useBlogStore())
-const {getComments, addComment} = useBlogStore()
+
+const blogStore = useBlogStore()
+
 
 const route = useRoute()
 const id = Number(route.params.id);
 console.log(id)
 // getComments(id)
+blogStore.getComments(id)
 
 // onMounted(() => {
 //   console.log(id)
 //   getPost(id)
 // })
 
-const blogStore = useBlogStore()
-
 let commentContent = ref();
+let page = ref(1)
 
 function sendComment() {
   if (commentContent.value == null || commentContent.value == "") {
@@ -69,7 +75,19 @@ function sendComment() {
     content: commentContent.value,
   })
   commentContent.value = null
+
+  setTimeout(function() {
+    // код, который нужно выполнить через 1 секунду
+    blogStore.getComments(id)
+  }, 1000);
 }
+
+function setPage(){
+  console.log(page.value)
+
+  blogStore.getCommentsPage(id, page.value-1)
+}
+
 
 </script>
 
