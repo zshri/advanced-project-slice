@@ -5,6 +5,14 @@ spring:
   application.name: backend-gateway-client
   cloud:
     gateway:
+#      default-filters:
+#        - DedupeResponseHeader=Access-Control-Allow-Credentials Access-Control-Allow-Origin
+#      globalcors:
+#        corsConfigurations:
+#          '[/**]':
+#            allowedOrigins: "*"
+#            allowedMethods: "*"
+#            allowedHeaders: "*"
       routes:
         - id: blog-service
           uri: http://localhost:8085/blog
@@ -12,14 +20,14 @@ spring:
             Path=/blog/**
           filters:
             TokenRelay=
-            RemoveRequestHeader=Cookie
+#            RemoveRequestHeader=Cookie
         - id: profile-service
           uri: http://localhost:8086/profile
           predicates:
             Path=/profile/**
           filters:
             TokenRelay=
-            RemoveRequestHeader=Cookie
+#            RemoveRequestHeader=Cookie
 
   security:
     oauth2:

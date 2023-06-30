@@ -4,6 +4,10 @@
 
 
     <div class="profile_status">
+      <p class="user_block_card_btn" >USER</p>
+    </div>
+
+    <div class="profile_status">
       <p class="user_block_card_btn" >STATUS</p>
 
       <v-textarea label=""></v-textarea>

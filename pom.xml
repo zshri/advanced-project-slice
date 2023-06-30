@@ -22,7 +22,7 @@
     <module>microservices/shop-service/order-service</module>
     <module>microservices/shop-service/inventory-service</module>
     <module>microservices/shop-service/catalog-service</module>
-    <module>lessons/hibernate-lesson</module>
+
 
 
   </modules>

@@ -74,8 +74,6 @@ defineProps({
 
 const blogStore = useBlogStore()
 
-let localNumber2
-
 const localNumber = ref(-1)
 
 onMounted(() => {
@@ -91,7 +89,6 @@ const name = ref("This is my name");
 
 let page = ref(1)
 
-
 watch("this.$router.name", (route) => {
   console.log(`is ${$route}`)
   if (route === "blog/publish"){
@@ -102,14 +99,10 @@ watch("this.$router.name", (route) => {
   }
 })
 
-
 function setPage(){
   console.log(page.value)
   console.log(page._value)
   getPageNumber(page.value-1)
-  // $router.push({ name: 'point', params: { id: String(point.connectionPoint) } }, () => {
-  //   $router.go(0);
-  // })
 }
 
 </script>

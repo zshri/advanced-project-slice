@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 
 
 import javax.validation.Valid;
+import java.security.Principal;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -53,33 +54,33 @@ public class PostController {
 
     @GetMapping("/publish")
     public ResponseEntity<?> getUserPubPosts(
-//            Principal principal,
+            Principal principal,
             @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "3") int size
     ) {
         Pageable pageable = PageRequest.of(page, size, Sort.by("createAt").descending());
-        Page<PostResponseDto> postResponseDtoPage = postService.getAllUserPub(principal , pageable);
+        Page<PostResponseDto> postResponseDtoPage = postService.getAllUserPub(principal.getName() , pageable);
 
         return new ResponseEntity<>(postResponseDtoPage, HttpStatus.OK);
     }
 
     @GetMapping("/save")
     public ResponseEntity<?> getUserSavePosts(
-//            Principal principal,
+            Principal principal,
             @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "3") int size
     ) {
         Pageable pageable = PageRequest.of(page, size, Sort.by("createAt").descending());
-        Page<PostResponseDto> postResponseDtoPage = postService.getAllUserSave(principal , pageable);
+        Page<PostResponseDto> postResponseDtoPage = postService.getAllUserSave(principal.getName() , pageable);
 
         return new ResponseEntity<>(postResponseDtoPage, HttpStatus.OK);
     }
 
     @GetMapping("/delete")
     public ResponseEntity<?> getUserDeletePosts(
-//            Principal principal,
+            Principal principal,
             @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "3") int size
     ) {
         Pageable pageable = PageRequest.of(page, size, Sort.by("createAt").descending());
-        Page<PostResponseDto> postResponseDtoPage = postService.getAllUserDelete(principal, pageable);
+        Page<PostResponseDto> postResponseDtoPage = postService.getAllUserDelete(principal.getName(), pageable);
 
         return new ResponseEntity<>(postResponseDtoPage, HttpStatus.OK);
     }
@@ -105,29 +106,29 @@ public class PostController {
 
     @PutMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> updatePost(
-//            Principal principal,
+            Principal principal,
             @PathVariable Long id,
             @Valid @RequestBody PostCreateDto postCreateDto
     ) {
-        return postService.update(principal, id, postCreateDto);
+        return postService.update(principal.getName(), id, postCreateDto);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deletePost(
-//            Principal principal,
+            Principal principal,
             @PathVariable Long id
     ) {
-        return postService.delete(principal, id);
+        return postService.delete(principal.getName(), id);
     }
 
     @GetMapping("/{postId}/like")
     public ResponseEntity<?> likePost(
-//            Principal principal,
+            Principal principal,
             @PathVariable Long postId
     ) {
         log.info("post like  " + postId );
 
-        return postService.likePost(principal, postId);
+        return postService.likePost(principal.getName(), postId);
     }
 
 }

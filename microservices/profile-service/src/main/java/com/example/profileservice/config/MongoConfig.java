@@ -21,7 +21,6 @@ import reactor.core.publisher.Flux;
 import java.util.Collection;
 import java.util.Collections;
 
-
 @Configuration
 public class MongoConfig extends AbstractMongoClientConfiguration {
 
@@ -80,8 +79,6 @@ public class MongoConfig extends AbstractMongoClientConfiguration {
 //            );
 //
 //            profileRepository.saveAll(users).subscribe();
-//
-//
 //        };
 //    }
 //}

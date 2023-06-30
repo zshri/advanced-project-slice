@@ -61,12 +61,12 @@ spring:
 #      WRITE_DATES_AS_TIMESTAMPS: false
 #      WRITE_BIGDECIMAL_AS_PLAIN: true
 
-#  security:
-#    oauth2:
-#      resourceserver:
-#        jwt:
-#          issuer-uri: http://localhost:8081/auth/realms/advanced-project-realm
-##          issuer-uri: http://keycloak:8081/auth/realms/advanced-project-realm
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:8081/auth/realms/advanced-project-realm
+#          issuer-uri: http://keycloak:8081/auth/realms/advanced-project-realm
 
 #management:
 #  health:

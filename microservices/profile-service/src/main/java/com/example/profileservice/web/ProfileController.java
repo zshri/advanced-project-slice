@@ -3,6 +3,7 @@ package com.example.profileservice.web;
 import com.example.profileservice.model.Profile;
 import com.example.profileservice.repository.ProfileRepository;
 import io.micrometer.observation.Observation;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Sort;
@@ -22,14 +23,15 @@ import java.util.Optional;
 import java.util.function.Consumer;
 
 @Controller
+@Slf4j
+@CrossOrigin(origins = "http://localhost:3000")
 @RequestMapping(path = "/profile")
 public class ProfileController {
 
     @Autowired
     private ProfileRepository profileRepository;
 
-    String principal = "Principal11";
-
+    String principal = "Principal";
 
     @GetMapping
     @ResponseBody
@@ -92,14 +94,7 @@ public class ProfileController {
         Optional<Profile> profileById = profileRepository.findOne(Example.of(Profile.builder().id(uuid).build()));
 
         return profileById.map(ResponseEntity::ok) .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
-// Пример отличия
-//        if (profileById.isPresent()) {
-//            return ResponseEntity.ok(profileById.get());
-//        } else {
-//            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-//        }
     }
-
 
     @PostMapping(
             consumes = MediaType.APPLICATION_JSON_VALUE,
@@ -113,11 +108,6 @@ public class ProfileController {
             return ResponseEntity.ok(response);
         } else return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
-
-
-
-
-
 
 
 

@@ -24,7 +24,6 @@ const blogStore = useBlogStore();
              class="">
         <router-view></router-view>
 
-
 <!--        <PagePostsPublish-->
 <!--            :page-posts="blogStore.pagePosts"-->
 <!--        />-->
@@ -36,6 +35,7 @@ const blogStore = useBlogStore();
 <!--        />-->
 
       </v-col>
+
       <v-col cols="12"
              xl="4"
              lg="4"
@@ -43,6 +43,7 @@ const blogStore = useBlogStore();
              class="">
         <UserBlock/>
       </v-col>
+
     </v-row>
   </v-container>
 

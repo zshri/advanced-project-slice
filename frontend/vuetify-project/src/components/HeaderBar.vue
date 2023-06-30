@@ -32,9 +32,27 @@
 
     </v-row>
 
+
     <v-row no-gutters class="header_bar_profile">
       <div class="header_bar_profile_div">
-        <v-btn variant="tonal" class="user_block_card_btn bg-black" @click="fetchPost">Sing in</v-btn> <v-btn variant="tonal" class="user_block_card_btn bg-black" @click="fetchPost">Sing up</v-btn>
+          <v-btn v-if="myProfile" variant="tonal" class="user_block_card_btn bg-black"
+                 :to="{ name: 'profile'}"
+                 @click="fetchPost"
+          >
+            {{myProfile.id}}
+          </v-btn>
+          <v-btn v-if="!myProfile" variant="tonal" class="user_block_card_btn bg-black"
+                 @click="fetchPost"
+                 :to="{ name: 'singin'}"
+          >
+            Sing in
+          </v-btn>
+          <v-btn v-if="!myProfile" variant="tonal" class="user_block_card_btn bg-black"
+                 @click="fetchPost"
+                 :to="{ name: 'singup'}"
+          >
+            Sing up
+          </v-btn>
       </div>
     </v-row>
 
@@ -51,12 +69,17 @@
 <script setup>
 
 
+import { RouterLink } from 'vue-router'
+import { storeToRefs } from 'pinia'
+import { useProfileStore } from "@/store/ProfileStore";
+import {defineProps, onBeforeMount, onMounted, ref, watch} from "vue";
 
-// function goHomePage() {
-//   // this.$router.push("/")?
-//
-//   this.$router.push({name: 'home'})
-// }
+const { myProfile, loading, error } = storeToRefs(useProfileStore())
+const { getMyProfile } = useProfileStore()
+
+getMyProfile()
+
+const profileStore = useProfileStore()
 
 
 

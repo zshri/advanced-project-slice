@@ -23,6 +23,7 @@ import java.security.Principal;
 public class CommentController {
     private final CommentService commentService;
     private final Log log = LogFactory.getLog(getClass());
+
     final String principal = "Principal";
 
     public CommentController(CommentService commentService) {

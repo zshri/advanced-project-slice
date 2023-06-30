@@ -5,6 +5,7 @@ export const useBlogStore = defineStore("BlogStore", {
   state: () => ({
     pagePosts: null,
     post: null,
+    postCreate: null,
     comments: null,
     comment: null,
     loading: false,
@@ -17,7 +18,9 @@ export const useBlogStore = defineStore("BlogStore", {
       this.pagePosts = null
       this.loading = true
       try {
-        this.pagePosts = await fetch('http://localhost:8085/blog/posts')
+        this.pagePosts = await fetch('http://localhost:8085/blog/posts', {
+          // mode: "no-cors",
+        })
           .then((response) => response.json())
       } catch (error) {
         this.error = error
@@ -72,6 +75,7 @@ export const useBlogStore = defineStore("BlogStore", {
     async createPost(post) {
       return axios.post('http://localhost:8085/blog/posts', post)
         .then(response => {
+          this.postCreate = response.data
           console.log('Post created successfully:', response.data);
           return response.data;
         })

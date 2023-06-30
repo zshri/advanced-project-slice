@@ -2,6 +2,14 @@
 
   <v-container >
 
+<!--    {{ myPro.id }}-->
+
+    <div v-if="myProfile" >
+      <v-card class="post_card">
+        id : {{myProfile.id}}  displayName : {{myProfile.displayName}}
+      </v-card>
+    </div>
+
     <v-row>
 
       <v-col cols="12"
@@ -14,7 +22,6 @@
 
       </v-col>
 
-
       <v-col cols="12"
              xl="8"
              lg="8"
@@ -24,19 +31,12 @@
 
 
 
+
       </v-col>
-
-
 
     </v-row>
 
-
-
   </v-container>
-
-
-
-
 
 </template>
 
@@ -45,4 +45,17 @@
 import ProfileStatusAndNotify from "@/components/profile/ProfileStatusAndNotify.vue";
 import ProfileUserMenu from "@/components/profile/ProfileUserMenu.vue";
 import ProfileUserSubscribers from "@/components/profile/ProfileUserSubscribers.vue";
+import { RouterLink } from 'vue-router'
+import { storeToRefs } from 'pinia'
+import { useProfileStore } from "@/store/ProfileStore";
+import {defineProps, onBeforeMount, onMounted, ref, watch} from "vue";
+
+const { myProfile, loading, error } = storeToRefs(useProfileStore())
+// const { getMyProfile } = useProfileStore()
+
+// getMyProfile()
+
+const profileStore = useProfileStore()
+
+
 </script>
