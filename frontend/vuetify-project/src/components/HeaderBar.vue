@@ -23,8 +23,8 @@
           <v-btn to="/profile" variant="tonal" class="user_block_card_btn bg-black main_menu_btn" @click="fetchPost">Profile</v-btn>
           <v-btn to="/chat" variant="tonal" class="user_block_card_btn bg-black main_menu_btn" @click="fetchPost">Chat</v-btn>
           <v-btn to="/notify" variant="tonal" class="user_block_card_btn bg-black main_menu_btn" @click="fetchPost">Notification</v-btn>
-
         </v-btn-group>
+
       </div>
     </v-row>
 
@@ -41,6 +41,14 @@
           >
             {{myProfile.id}}
           </v-btn>
+
+          <v-btn v-if="myProfile" variant="tonal" class="user_block_card_btn bg-black"
+                 @click="logout1"
+          >
+            Logout
+          </v-btn>
+
+
           <v-btn v-if="!myProfile" variant="tonal" class="user_block_card_btn bg-black"
                  @click="fetchPost"
                  :to="{ name: 'singin'}"
@@ -68,18 +76,28 @@
 
 <script setup>
 
-
 import { RouterLink } from 'vue-router'
 import { storeToRefs } from 'pinia'
 import { useProfileStore } from "@/store/ProfileStore";
+import { useKeycloakStore } from "@/store/KeycloakStore";
 import {defineProps, onBeforeMount, onMounted, ref, watch} from "vue";
 
 const { myProfile, loading, error } = storeToRefs(useProfileStore())
 const { getMyProfile } = useProfileStore()
 
+const keycloakStore = useKeycloakStore()
+
+
+onMounted(
+  keycloakStore.init()
+)
+
+
 getMyProfile()
 
 const profileStore = useProfileStore()
+
+
 
 
 

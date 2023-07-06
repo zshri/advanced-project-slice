@@ -11,7 +11,7 @@
       </div>
 
       <div class="post_info">
-        <p> {{ post.author.toUpperCase() }} | {{ post.createAt.toUpperCase() }} | 0 COMMENTS</p>
+        <p> {{ post.author.toUpperCase() }} |  | 0 COMMENTS</p>
       </div>
 
       <div class="post_text">
@@ -55,13 +55,18 @@ import { RouterLink } from 'vue-router'
 import { storeToRefs } from 'pinia'
 import { useBlogStore } from "@/store/BlogStore";
 import {defineProps, onBeforeMount, onMounted, ref, watch} from "vue";
+import {useKeycloakStore} from "@/store/KeycloakStore";
 
 const { pagePosts, loading, error } = storeToRefs(useBlogStore())
 const { getPage , getPageNumber} = useBlogStore()
 
+
+
 getPage()
 
-// todo Обязательно ли ложить в конст?
+
+
+
 defineProps({
   page: String,
   content: {type: String, required: true, default: '---'},

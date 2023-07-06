@@ -1,5 +1,8 @@
 import {defineStore} from 'pinia'
 import axios from "axios";
+import { useKeycloakStore } from "@/store/KeycloakStore";
+
+
 
 export const useBlogStore = defineStore("BlogStore", {
   state: () => ({
@@ -14,20 +17,56 @@ export const useBlogStore = defineStore("BlogStore", {
 
   actions: {
 
+    // async getPage(page) {
+    //   const {token} = useKeycloakStore()
+    //   this.pagePosts = null
+    //   this.loading = true
+    //   try {
+    //     // add headers
+    //     this.pagePosts = await fetch('http://localhost:8085/blog/posts', {
+    //       // mode: 'no-cors',
+    //       headers: {
+    //         // 'Authorization': `Bearer ${localStorage.getItem("token")}`,
+    //         'Origin': 'http://localhost:3000',
+    //         'Access-Control-Request-Method': 'GET',
+    //         'Access-Control-Request-Headers': 'Authorization',
+    //         Authorization: `Bearer ${token}`,
+    //       }
+    //     }
+    //     )
+    //       .then((response) => response.json())
+    //   } catch (error) {
+    //     this.error = error
+    //   } finally {
+    //     this.loading = false
+    //   }
+    // },
+
     async getPage(page) {
+      const {token} = useKeycloakStore()
       this.pagePosts = null
       this.loading = true
       try {
-        this.pagePosts = await fetch('http://localhost:8085/blog/posts', {
-          // mode: "no-cors",
+        // add headers
+        const response = await axios.get('http://localhost:8085/blog/posts', {
+          // mode: 'no-cors',
+          headers: {
+            'Origin': 'http://localhost:3000',
+            'Access-Control-Request-Method': 'GET',
+            'Access-Control-Request-Headers': 'Authorization',
+            Authorization: `Bearer ${token}`,
+          },
         })
-          .then((response) => response.json())
+        this.pagePosts = response.data
+
       } catch (error) {
         this.error = error
       } finally {
         this.loading = false
       }
     },
+
+
     async getPageNumber(page) {
       this.pagePosts = null
       this.loading = true

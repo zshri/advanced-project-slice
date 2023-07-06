@@ -3,6 +3,8 @@
   <v-container>
     <div>README</div>
 
+    <div></div>
+
 <!--    <div>-->
 <!--      {{ movieStore.movies }}-->
 <!--    </div>-->
@@ -32,12 +34,40 @@
 
 import {useMovieStore} from "@/store/app";
 import Movie from "@/views/Movie.vue";
+import {useKeycloakStore} from "@/store/KeycloakStore";
+import axios from "axios";
 
 const movieStore = useMovieStore();
 
 
-function fetchPost() {
+let test = null
+
+fetchPost()
+
+
+async function fetchPost() {
+  const token = useKeycloakStore().token
+  this.loading = true
+  try {
+    // add headers
+    return await axios.get('http://localhost:8085/blog/posts', {
+      // mode: 'no-cors',
+      headers: {
+        // 'Access-Control-Allow-Origin': '*',
+        // Accept: 'application/json',
+        // 'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+    })
+  } catch (error) {
+    this.error = error
+  } finally {
+    this.loading = false
+  }
 }
+
+
+
 
 const fetchAlt = () => {
 

@@ -15,6 +15,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
@@ -28,19 +29,22 @@ import java.util.Map;
 // todo page size limit 10-20 how?
 
 @Slf4j
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = "https://localhost:3000")
 @RestController
 @RequestMapping("/posts")
 public class PostController {
     private final PostService postService;
-    final String principal = "Principal";
+
+//    final String principal = "Principal";
     public PostController(PostService postService) {
         this.postService = postService;
     }
 
+
     @GetMapping
     public ResponseEntity<?> getPosts(
-//            Principal principal,
+            Principal principal,
+//            @AuthenticationPrincipal String username,
 //            @PageableDefault(sort = {"id"}, direction = Sort.Direction.DESC) Pageable pageable,
 //            @ParameterObject Pageable pageable
 //            @RequestParam(defaultValue = "id,desc") String[] sort
@@ -48,6 +52,8 @@ public class PostController {
     ) {
         Pageable pageable = PageRequest.of(page, size, Sort.by("createAt").descending());
         Page<PostResponseDto> postResponseDtoPage = postService.getAll(pageable);
+
+        System.out.println(principal.getName());
 
         return new ResponseEntity<>(postResponseDtoPage, HttpStatus.OK);
     }
@@ -85,12 +91,12 @@ public class PostController {
         return new ResponseEntity<>(postResponseDtoPage, HttpStatus.OK);
     }
 
-    @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping()
     public ResponseEntity<?> createPost(
-//            Principal principal,
+            Principal principal,
             @Valid @RequestBody PostCreateDto postCreateDto
     ) {
-        Post savePost = postService.save(principal, postCreateDto);
+        Post savePost = postService.save(principal.getName(), postCreateDto);
         log.info("post create " + savePost.getId() );
 
         return new ResponseEntity<>(savePost, HttpStatus.CREATED);
@@ -98,10 +104,10 @@ public class PostController {
 
     @GetMapping("/{id}")
     public ResponseEntity<?> getPost(
-//            Principal principal,
+            Principal principal,
             @PathVariable Long id
     ) {
-        return postService.getById(principal, id);
+        return postService.getById(principal.getName(), id);
     }
 
     @PutMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
