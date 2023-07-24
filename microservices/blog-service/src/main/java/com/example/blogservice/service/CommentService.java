@@ -29,9 +29,6 @@ public class CommentService {
 
         Post post = postRepository.findById(postId).orElseThrow();
 
-
-
-
         Comment example = Comment.builder()
                 .post(post).build();
 
@@ -45,27 +42,19 @@ public class CommentService {
     }
 
     public Comment addComment(String principal, CommentDto commentDto) {
-
         Post post = postRepository.findById(commentDto.getPostId())
                 .orElseThrow(() -> new NotFoundResourceEx("not found"));
-
        if (post.getPostStatus().equals(PostStatus.PUBLISH)){
-
            Comment comment = Comment.builder()
                    .content(commentDto.getContent())
                    .createAt(Instant.now())
                    .author(principal)
                    .post(post)
                    .build();
-
            Comment save = commentRepository.save(comment);
-
            save.setPost(null);
-
            return save;
-
        }
-
        return null;
     }
 }

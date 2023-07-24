@@ -1,12 +1,11 @@
 import {defineStore} from 'pinia'
 import axios from "axios";
 import { useKeycloakStore } from "@/store/KeycloakStore";
-
-
+import {ref} from "vue";
 
 export const useBlogStore = defineStore("BlogStore", {
   state: () => ({
-    pagePosts: null,
+    pagePosts: ref(null),
     post: null,
     postCreate: null,
     comments: null,
@@ -17,31 +16,6 @@ export const useBlogStore = defineStore("BlogStore", {
 
   actions: {
 
-    // async getPage(page) {
-    //   const {token} = useKeycloakStore()
-    //   this.pagePosts = null
-    //   this.loading = true
-    //   try {
-    //     // add headers
-    //     this.pagePosts = await fetch('http://localhost:8085/blog/posts', {
-    //       // mode: 'no-cors',
-    //       headers: {
-    //         // 'Authorization': `Bearer ${localStorage.getItem("token")}`,
-    //         'Origin': 'http://localhost:3000',
-    //         'Access-Control-Request-Method': 'GET',
-    //         'Access-Control-Request-Headers': 'Authorization',
-    //         Authorization: `Bearer ${token}`,
-    //       }
-    //     }
-    //     )
-    //       .then((response) => response.json())
-    //   } catch (error) {
-    //     this.error = error
-    //   } finally {
-    //     this.loading = false
-    //   }
-    // },
-
     async getPage(page) {
       const {token} = useKeycloakStore()
       this.pagePosts = null
@@ -51,9 +25,6 @@ export const useBlogStore = defineStore("BlogStore", {
         const response = await axios.get('http://localhost:8085/blog/posts', {
           // mode: 'no-cors',
           headers: {
-            'Origin': 'http://localhost:3000',
-            'Access-Control-Request-Method': 'GET',
-            'Access-Control-Request-Headers': 'Authorization',
             Authorization: `Bearer ${token}`,
           },
         })
@@ -66,15 +37,23 @@ export const useBlogStore = defineStore("BlogStore", {
       }
     },
 
-
     async getPageNumber(page) {
+      const {token} = useKeycloakStore()
       this.pagePosts = null
       this.loading = true
       try {
-        this.pagePosts = await fetch('http://localhost:8085/blog/posts?' + new URLSearchParams({
+        // add headers
+        const response = await axios.get('http://localhost:8085/blog/posts', {
+          // mode: 'no-cors',
+          params: {
             page: page
-          }))
-          .then((response) => response.json())
+          },
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
+        this.pagePosts = response.data
+
       } catch (error) {
         this.error = error
       } finally {
@@ -83,13 +62,45 @@ export const useBlogStore = defineStore("BlogStore", {
     },
 
     async getPagePublish(page) {
-    },
-    async getPageSave(page) {
+      const {token} = useKeycloakStore()
       this.pagePosts = null
       this.loading = true
       try {
-        this.pagePosts = await fetch('http://localhost:8085/blog/posts/save')
-          .then((response) => response.json())
+        // add headers
+        const response = await axios.get('http://localhost:8085/blog/posts/publish', {
+          // mode: 'no-cors',
+          params: {
+            page: page
+          },
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
+        this.pagePosts = response.data
+
+      } catch (error) {
+        this.error = error
+      } finally {
+        this.loading = false
+      }
+    },
+    async getPageSave(page) {
+      const {token} = useKeycloakStore()
+      this.pagePosts = null
+      this.loading = true
+      try {
+        // add headers
+        const response = await axios.get('http://localhost:8085/blog/posts/save', {
+          // mode: 'no-cors',
+          params: {
+            page: page
+          },
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
+        this.pagePosts = response.data
+
       } catch (error) {
         this.error = error
       } finally {
@@ -97,13 +108,46 @@ export const useBlogStore = defineStore("BlogStore", {
       }
     },
     async getPageDelete(page) {
+      const {token} = useKeycloakStore()
+      this.pagePosts = null
+      this.loading = true
+      try {
+        // add headers
+        const response = await axios.get('http://localhost:8085/blog/posts/delete', {
+          // mode: 'no-cors',
+          params: {
+            page: page
+          },
+          headers: {
+
+            Authorization: `Bearer ${token}`,
+          },
+        })
+        this.pagePosts = response.data
+
+      } catch (error) {
+        this.error = error
+      } finally {
+        this.loading = false
+      }
     },
+
     async getPost(id) {
+      const {token} = useKeycloakStore()
       this.post = null
       this.loading = true
       try {
-        this.post = await fetch(`http://localhost:8085/blog/posts/${id}`)
-          .then((response) => response.json())
+        const response = await axios.get(`http://localhost:8085/blog/posts/${id}`, {
+          // mode: 'no-cors',
+          params: {
+            postId: id
+          },
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
+        this.post = response.data
+
       } catch (error) {
         this.error = error
       } finally {
@@ -112,7 +156,13 @@ export const useBlogStore = defineStore("BlogStore", {
     },
 
     async createPost(post) {
-      return axios.post('http://localhost:8085/blog/posts', post)
+      const {token} = useKeycloakStore()
+
+      return axios.post('http://localhost:8085/blog/posts', post, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
         .then(response => {
           this.postCreate = response.data
           console.log('Post created successfully:', response.data);
@@ -131,11 +181,20 @@ export const useBlogStore = defineStore("BlogStore", {
     },
 
     async getComments(id) {
+      const {token} = useKeycloakStore()
+
       this.comments = null
       this.loading = true
       try {
-        this.comments = await fetch(`http://localhost:8085/blog/comments/${id}`)
-          .then((response) => response.json())
+        const response = await axios.get(`http://localhost:8085/blog/comments/${id}`, {
+          headers: {
+            // 'Origin': 'http://localhost:3000',
+            // 'Access-Control-Request-Method': 'GET',
+            // 'Access-Control-Request-Headers': 'Authorization',
+            Authorization: `Bearer ${token}`,
+          },
+        })
+        this.comments = response.data
       } catch (error) {
         this.error = error
       } finally {
@@ -144,13 +203,20 @@ export const useBlogStore = defineStore("BlogStore", {
     },
 
     async getCommentsPage(id, page) {
+      const {token} = useKeycloakStore()
+
       this.comments = null
       this.loading = true
       try {
-        this.comments = await fetch('http://localhost:8085/blog/comments/${id}?' + new URLSearchParams({
-          page: page
-        }))
-          .then((response) => response.json())
+        const response = await axios.get(`http://localhost:8085/blog/comments/${id}`, {
+          params: {
+            page: page
+          },
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
+        this.comments = response.data
       } catch (error) {
         this.error = error
       } finally {
@@ -159,7 +225,13 @@ export const useBlogStore = defineStore("BlogStore", {
     },
 
     async addComment(comment) {
-      return axios.post('http://localhost:8085/blog/comments/add', comment)
+      const {token} = useKeycloakStore()
+
+      return axios.post('http://localhost:8085/blog/comments/add', comment, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
         .then(response => {
           console.log('Comment created successfully:', response.data);
           return response.data;

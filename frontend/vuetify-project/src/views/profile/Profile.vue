@@ -42,9 +42,9 @@
 
 
 <script setup>
-import ProfileStatusAndNotify from "@/components/profile/ProfileStatusAndNotify.vue";
-import ProfileUserMenu from "@/components/profile/ProfileUserMenu.vue";
-import ProfileUserSubscribers from "@/components/profile/ProfileUserSubscribers.vue";
+import ProfileStatusAndNotify from "@/views/profile/ProfileStatusAndNotify.vue";
+import ProfileUserMenu from "@/views/profile/ProfileUserMenu.vue";
+import ProfileUserSubscribers from "@/views/profile/ProfileUserSubscribers.vue";
 import { RouterLink } from 'vue-router'
 import { storeToRefs } from 'pinia'
 import { useProfileStore } from "@/store/ProfileStore";

@@ -2,10 +2,7 @@
 
   <v-card v-if="post" class="post_card user_block_card">
     <div class="post_title">
-
       <p class="text-h3">{{ post.title }}</p>
-
-
     </div>
 
     <div class="post_info">
@@ -32,7 +29,7 @@ import {RouterLink, useRoute } from "vue-router";
 import { storeToRefs } from 'pinia'
 import { useBlogStore } from "@/store/BlogStore";
 import {defineProps, onBeforeMount, onMounted, ref, watch} from "vue";
-import BlogPostComments from "@/components/blog/BlogPostComments.vue";
+import BlogPostComments from "@/views/blog/BlogPostComments.vue";
 
 const { post, loading, error } = storeToRefs(useBlogStore())
 const { getPost } = useBlogStore()
@@ -67,13 +64,10 @@ getPost(id)
   margin-bottom: 10px;
 }
 
-
 .page_pagi{
   margin-right: 100px;
   margin-left: 100px;
 }
-
-
 
 
 </style>

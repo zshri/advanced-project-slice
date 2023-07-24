@@ -16,8 +16,6 @@
     <v-row no-gutters>
       <div class="header_bar_main_menu">
 
-
-
         <v-btn-group>
           <v-btn to="/blog/" variant="tonal" class="user_block_card_btn bg-black main_menu_btn"  @click="">Blog</v-btn>
           <v-btn to="/profile" variant="tonal" class="user_block_card_btn bg-black main_menu_btn" @click="fetchPost">Profile</v-btn>
@@ -31,7 +29,6 @@
     <v-row no-gutters>
 
     </v-row>
-
 
     <v-row no-gutters class="header_bar_profile">
       <div class="header_bar_profile_div">
@@ -64,13 +61,7 @@
       </div>
     </v-row>
 
-
-
   </v-app-bar>
-
-
-
-
 
 </template>
 
@@ -79,25 +70,11 @@
 import { RouterLink } from 'vue-router'
 import { storeToRefs } from 'pinia'
 import { useProfileStore } from "@/store/ProfileStore";
-import { useKeycloakStore } from "@/store/KeycloakStore";
-import {defineProps, onBeforeMount, onMounted, ref, watch} from "vue";
+import {useKeycloakStore} from "@/store/KeycloakStore";
+
 
 const { myProfile, loading, error } = storeToRefs(useProfileStore())
-const { getMyProfile } = useProfileStore()
-
 const keycloakStore = useKeycloakStore()
-
-
-onMounted(
-  keycloakStore.init()
-)
-
-
-getMyProfile()
-
-const profileStore = useProfileStore()
-
-
 
 
 

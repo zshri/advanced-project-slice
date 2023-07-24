@@ -24,17 +24,15 @@ public class CommentController {
     private final CommentService commentService;
     private final Log log = LogFactory.getLog(getClass());
 
-    final String principal = "Principal";
-
+//    final String principal = "Principal";
     public CommentController(CommentService commentService) {
         this.commentService = commentService;
     }
 
-
 //    todo Validate id
     @GetMapping("/{postId}")
     public ResponseEntity<?> getComments(
-//            Principal principal,
+            Principal principal,
             @PathVariable Long postId,
             @RequestParam(defaultValue = "0") int page
     ){
@@ -47,10 +45,10 @@ public class CommentController {
 
     @PostMapping("/add")
     public ResponseEntity<?> addComment(
-//            Principal principal,
+            Principal principal,
            @RequestBody CommentDto commentDto
     ){
-        Comment comment = commentService.addComment(principal, commentDto);
+        Comment comment = commentService.addComment(principal.getName(), commentDto);
 
         return ResponseEntity.ok(comment);
     }

@@ -1,10 +1,8 @@
 
 import { createRouter, createWebHistory } from 'vue-router'
-import BlogPost from "@/components/blog/BlogPost.vue";
-import PagePosts from "@/components/blog/PagePosts.vue";
-import PagePostsPublish from "@/components/blog/PagePostsPublish.vue";
-import PagePostsSave from "@/components/blog/PagePostsSave.vue";
-import PostCreate from "@/components/blog/PostCreate.vue";
+import BlogPost from "@/views/blog/BlogPost.vue";
+import PagePosts from "@/views/blog/PagePosts.vue";
+import PostCreate from "@/views/blog/PostCreate.vue";
 
 const routes = [
   {
@@ -14,7 +12,8 @@ const routes = [
   },
   {
     path: '/blog',
-    component: () => import('@/views/Blog.vue'),
+    name: "blog",
+    component: () => import('@/views/blog/Blog.vue'),
     children: [
       {
         path: '',
@@ -44,8 +43,15 @@ const routes = [
       {
         path: 'save',
         name: "posts-save",
-        component: PagePostsSave
+        component: PagePosts
       },
+      {
+        path: 'save/:id',
+        name: "posts-save-page",
+        component: PagePosts
+      },
+
+
       {
         path: 'delete',
         name: "posts-del",
@@ -59,19 +65,14 @@ const routes = [
         component: BlogPost
       },
 
-
     ],
-
-
   },
-
-
 
 
 
   {
     path: '/profile',
-    component: () => import('@/views/Profile.vue'),
+    component: () => import('@/views/profile/Profile.vue'),
     name: 'profile',
 
     children: [
@@ -81,28 +82,28 @@ const routes = [
         // route level code-splitting
         // this generates a separate chunk (about.[hash].js) for this route
         // which is lazy-loaded when the route is visited.
-        component: () => import(/* webpackChunkName: "home" */ '@/views/Profile.vue'),
+        component: () => import(/* webpackChunkName: "home" */ '@/views/profile/Profile.vue'),
       },
     ],
 
   },
   {
     path: '/singin',
-    component: () => import('@/components/profile/ProfileSingin.vue'),
+    component: () => import('@/views/profile/ProfileSingin.vue'),
     name: 'singin',
   },
   {
     path: '/singup',
-    component: () => import('@/components/profile/ProfileSingup.vue'),
+    component: () => import('@/views/profile/ProfileSingup.vue'),
     name: 'singup',
   },
 
   {
     path: '/chat',
-    component: () => import('@/views/Chat.vue'),
+    component: () => import('@/views/chat/Chat.vue'),
   },{
     path: '/notify',
-    component: () => import('@/components/profile/ProfileStatusAndNotify.vue'),
+    component: () => import('@/views/profile/ProfileStatusAndNotify.vue'),
   },
 
   {

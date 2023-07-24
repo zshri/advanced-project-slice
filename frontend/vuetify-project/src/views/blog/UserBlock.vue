@@ -8,10 +8,10 @@
 
   <p class="user_block_card_btn" >MY POSTS</p>
 
-  <div><v-btn block :to="{ name: 'posts-create'}" class="user_block_card_btn bg-black" variant="outlined" @click="fetchPost">Create</v-btn></div>
-  <div><v-btn :to="{ name: 'posts-pub'}" block class="user_block_card_btn" @click="fetchPost">PUBLISH</v-btn></div>
-  <div><v-btn :to="{ name: 'posts-save'}" block class="user_block_card_btn" @click="fetchPost">SAVE</v-btn></div>
-  <div><v-btn :to="{ name: 'posts-del'}" block class="user_block_card_btn" @click="fetchPost">DELETE</v-btn></div>
+  <div><v-btn :to="{ name: 'posts-create'}" block="" class="user_block_card_btn bg-black" variant="outlined" @click="">Create</v-btn></div>
+  <div><v-btn :to="{ name: 'posts-pub'}" block="" class="user_block_card_btn" @click="">PUBLISH</v-btn></div>
+  <div><v-btn :to="{ name: 'posts-save'}" block="" class="user_block_card_btn" @click="">SAVE</v-btn></div>
+  <div><v-btn :to="{ name: 'posts-del'}" block="" class="user_block_card_btn" @click="">DELETE</v-btn></div>
 
 </v-card>
 

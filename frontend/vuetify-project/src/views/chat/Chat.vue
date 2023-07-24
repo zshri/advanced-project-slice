@@ -43,6 +43,6 @@
 
 <script setup>
 
-import ChatRooms from "@/components/chat/ChatRooms.vue";
-import Room from "@/components/chat/Room.vue";
+import ChatRooms from "@/views/chat/ChatRooms.vue";
+import Room from "@/views/chat/Room.vue";
 </script>

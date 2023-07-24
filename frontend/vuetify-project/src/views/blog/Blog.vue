@@ -1,13 +1,12 @@
 <script setup>
-
-import UserBlock from "@/components/blog/UserBlock.vue";
+import {computed} from "vue";
+import UserBlock from "@/views/blog/UserBlock.vue";
 import { useBlogStore } from "@/store/BlogStore";
-import PagePostsPublish from "@/components/blog/PagePostsPublish.vue";
-import PagePosts from "@/components/blog/PagePosts.vue";
-import PostCreate from "@/components/blog/PostCreate.vue";
+
 
 const blogStore = useBlogStore();
 
+const now = computed(() => Date.now())
 
 
 </script>

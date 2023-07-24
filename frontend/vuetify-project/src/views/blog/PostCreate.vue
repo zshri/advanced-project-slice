@@ -5,8 +5,9 @@
     <p class="user_block_card_btn" >CREATE</p>
 
     <div class="post_create_inputs">
-      <v-text-field label="TITLE" variant="outlined" v-model="postTitle"></v-text-field>
-      <v-textarea label="CONTENT" variant="outlined" v-model="postContent"></v-textarea>
+<!--      <v-text-field label="TITLE" variant="outlined" v-model="postToSend.title"></v-text-field>  todo почему не работает? -->
+      <v-textarea label="TITLE" variant="outlined" v-model="postToSend.title"></v-textarea>
+      <v-textarea label="CONTENT" variant="outlined" v-model="postToSend.content"></v-textarea>
     </div>
 
     <div class="post_create_footer">
@@ -35,9 +36,13 @@ import {useBlogStore} from "@/store/BlogStore";
 import {ref} from "vue";
 
 const blogStore = useBlogStore()
-const postTitle = ref();
-const postContent = ref();
-const postToSend = {}
+
+
+const postToSend = ref({
+  title: 'title',
+  content: 'content'
+})
+
 
 const router = useRouter()
 const route = useRoute()
@@ -45,8 +50,8 @@ const route = useRoute()
 
 function publishPost() {
   blogStore.createPost({
-    title: postTitle.value,
-    content: postContent.value,
+    title: postToSend.value.title,
+    content: postToSend.value.content,
     postStatus: "PUBLISH"
   })
   setTimeout(function() {
@@ -58,13 +63,13 @@ function publishPost() {
 
 function savePost() {
   blogStore.createPost({
-    title: postTitle,
-    content: postContent,
+    title: postToSend.value.title,
+    content: postToSend.value.content,
     postStatus: "SAVE"
   })
   setTimeout(function() {
     // код, который нужно выполнить через 1 секунду
-    router.push({ name: 'posts-pub'})
+    router.push({ name: 'posts-save'})
   }, 1000);
   console.log("save post")
 }
