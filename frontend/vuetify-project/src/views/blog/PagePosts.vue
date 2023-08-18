@@ -3,8 +3,8 @@
   <p v-if="loading">Loading posts...</p>
   <p v-if="error">{{ error.message }}</p>
 
-  <p>Current route: {{ currentRoute }}</p>
-  <p>Current routeId: {{ currentRouteId }}</p>
+<!--  <p>Current route: {{ currentRoute }}</p>-->
+<!--  <p>Current routeId: {{ currentRouteId }}</p>-->
 
   <div v-if="pagePosts" v-for="post in pagePosts.content" :key="post.id">
 
@@ -46,13 +46,10 @@
 
 <script setup>
 import {defineProps, getCurrentInstance, onBeforeMount, onMounted, ref, watch} from "vue";
-import {RouterLink, useRoute} from 'vue-router'
+import {RouterLink, useRoute, useRouter} from 'vue-router'
 import { storeToRefs } from 'pinia'
 import { useBlogStore } from "@/store/BlogStore";
 
-// const props = defineProps({
-//   title: String
-// });
 // defineProps({
 //   page: String,
 //   content: {type: String, required: true, default: '---'},
@@ -62,6 +59,8 @@ import { useBlogStore } from "@/store/BlogStore";
 //   last: false,
 //   empty: false
 // });
+// defineProps(['title'])
+// defineEmits(['enlarge-text'])
 
 const { pagePosts, loading, error } = storeToRefs(useBlogStore())
 const { getPage, getPageNumber, getPagePublish, getPageSave, getPageDelete } = useBlogStore()
@@ -70,6 +69,7 @@ const blogStore = useBlogStore()
 // const message = ref(blogStore.state.post);  ??
 
 const route = useRoute()
+const router = useRouter()
 
 const name = ref("This is my name");
 let page = ref(1)
@@ -78,11 +78,10 @@ const currentRoute = ref('')
 const currentRouteId = ref('')
 
 
-
 function setPage(){
   console.log(page.value)
-  console.log(page._value)
   getPageNumber(page.value-1)
+  router.push({ name: 'blog-page', params: { id: page.value } })
 }
 
 onMounted(() => {
@@ -109,8 +108,6 @@ onBeforeMount(() => {
   // }
   console.log("onBeforeMount")
 })
-
-
 
 watch(
   () => route.name,

@@ -1,10 +1,13 @@
 import {defineStore} from 'pinia'
 import axios from "axios";
+import {useKeycloakStore} from "@/store/KeycloakStore";
 
 export const useProfileStore = defineStore("ProfileStore", {
   state: () => ({
     myProfile: null,
     userProfile: null,
+
+    aside: false,
 
     loading: false,
     error: null
@@ -13,11 +16,17 @@ export const useProfileStore = defineStore("ProfileStore", {
   actions: {
 
     async getMyProfile() {
+      const {token} = useKeycloakStore()
       this.myProfile = null
       this.loading = true
       try {
-        this.myProfile = await fetch('http://localhost:8086/profile')
-          .then((response) => response.json())
+        const response = await axios.get(`http://localhost:8086/profile`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
+        this.myProfile = response.data
+
       } catch (error) {
         this.error = error
       } finally {

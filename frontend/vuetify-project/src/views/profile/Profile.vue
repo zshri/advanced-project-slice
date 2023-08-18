@@ -6,7 +6,12 @@
 
     <div v-if="myProfile" >
       <v-card class="post_card">
-        id : {{myProfile.id}}  displayName : {{myProfile.displayName}}
+        <div>id : {{myProfile.id}}</div>
+        <div>displayName : {{myProfile.displayName}}</div>
+        <div>displayStatus : {{myProfile.displayStatus}}</div>
+        <div>avatarUrl : {{myProfile.avatarUrl}}</div>
+        <div>emailNews : {{myProfile.emailNews}}</div>
+
       </v-card>
     </div>
 
@@ -18,7 +23,7 @@
              md="4"
              class="">
         <ProfileUserMenu/>
-        <ProfileUserSubscribers/>
+<!--        <ProfileUserSubscribers/>-->
 
       </v-col>
 
@@ -27,10 +32,7 @@
              lg="8"
              md="8"
              class="">
-        <ProfileStatusAndNotify/>
-
-
-
+        <ProfileStatusAndNotify :key="componentKey"/>
 
       </v-col>
 
@@ -56,6 +58,12 @@ const { myProfile, loading, error } = storeToRefs(useProfileStore())
 // getMyProfile()
 
 const profileStore = useProfileStore()
+
+
+const componentKey = ref(0)
+function reloadComponent() {
+  componentKey.value += 1
+}
 
 
 </script>

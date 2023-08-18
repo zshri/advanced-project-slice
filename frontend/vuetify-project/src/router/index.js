@@ -22,6 +22,11 @@ const routes = [
         component: PagePosts,
       },
       {
+        path: ':id',
+        name: "blog-page",
+        component: PagePosts,
+      },
+      {
         // при совпадении пути с шаблоном /user/:id/profile
         // в <router-view> компонента User будет показан UserProfile
         path: 'all',

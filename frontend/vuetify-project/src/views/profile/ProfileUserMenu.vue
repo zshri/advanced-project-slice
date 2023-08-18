@@ -4,11 +4,9 @@
 
   <p class="user_block_card_btn" >PROFILE # USER</p>
 
-  <v-img
-    :width="600"
-    aspect-ratio="16/9"
-    cover
-    src="https://www.kindpng.com/picc/m/780-7804962_cartoon-avatar-png-image-transparent-avatar-user-image.png"
+  <v-img style="background: whitesmoke"
+    :width="300"
+    :height="300"
   ></v-img>
 
 
@@ -24,6 +22,11 @@
 
 <script setup>
 
+
+
+
+
+
 </script>
 
 <style>
@@ -38,6 +41,7 @@
   //margin: 10px;
   margin-top: 10px;
   margin-bottom: 10px;
+  margin-left: 10px;
 }
 
 .mrg{
