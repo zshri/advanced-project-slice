@@ -13,24 +13,37 @@
       </div>
     </v-row>
 
-    <v-row no-gutters>
-      <div class="header_bar_main_menu">
 
+
+    <div class="header_bar_main_menu">
+    <v-row no-gutters>
         <v-btn-group>
           <v-btn to="/blog/" variant="tonal" class="user_block_card_btn bg-black main_menu_btn"  @click="">Blog</v-btn>
-          <v-btn to="/profile" variant="tonal" class="user_block_card_btn bg-black main_menu_btn" @click="fetchPost">Profile</v-btn>
-          <v-btn to="/chat" variant="tonal" class="user_block_card_btn bg-black main_menu_btn" @click="fetchPost">Chat</v-btn>
-          <v-btn to="/notify" variant="tonal" class="user_block_card_btn bg-black main_menu_btn" @click="fetchPost">Notification</v-btn>
-        </v-btn-group>
 
-      </div>
+
+          <v-btn to="/profile" variant="tonal" class="user_block_card_btn bg-black main_menu_btn" @click="">Profile</v-btn>
+          <v-btn to="/chat" variant="tonal" class="user_block_card_btn bg-black main_menu_btn" @click="">Chat</v-btn>
+          <v-btn to="/notify" variant="tonal" class="user_block_card_btn bg-black main_menu_btn" @click="">Notification</v-btn>
+        </v-btn-group>
     </v-row>
+    </div>
 
     <v-row no-gutters>
 
     </v-row>
 
-    <v-row no-gutters class="header_bar_profile">
+
+    <div class="header_bar_button_menu">
+      <v-btn icon="mdi-menu" size="large" @click="profileStore.aside = !profileStore.aside"></v-btn>
+    </div>
+
+
+
+
+
+    <div class="header_bar_profile">
+
+    <v-row no-gutters>
       <div class="header_bar_profile_div">
           <v-btn v-if="myProfile" variant="tonal" class="user_block_card_btn bg-black"
                  :to="{ name: 'profile'}"
@@ -61,6 +74,8 @@
       </div>
     </v-row>
 
+    </div>
+
   </v-app-bar>
 
 </template>
@@ -75,6 +90,8 @@ import {useKeycloakStore} from "@/store/KeycloakStore";
 
 const { myProfile, loading, error } = storeToRefs(useProfileStore())
 const keycloakStore = useKeycloakStore()
+const profileStore = useProfileStore()
+
 
 
 
@@ -111,5 +128,47 @@ const keycloakStore = useKeycloakStore()
 .header_bar_profile_div{
   margin-right: 20px;
 }
+
+.header_bar_side_menu {
+
+}
+
+
+/* Стили для разрешения экрана до 600 пикселей */
+@media screen and (max-width: 768px) {
+  .element {
+    display: none; /* Скрыть элемент */
+  }
+  .header_bar_main_menu {
+    display: none; /* Скрыть элемент */
+  }
+  .header_bar_profile{
+    display: none; /* Скрыть элемент */
+  }
+
+}
+
+/* Стили для разрешения экрана от 601 до 1200 пикселей */
+@media screen and (min-width: 768px) and (max-width: 1024px) {
+  .element {
+    opacity: 0.5; /* Изменить прозрачность элемента */
+  }
+
+  .header_bar_button_menu {
+    display: none;
+  }
+}
+
+/* Стили для разрешения экрана от 1201 пикселя и выше */
+@media screen and (min-width: 1024px) {
+  .element {
+    //display: block; /* Отобразить элемент */
+  }
+  .header_bar_button_menu {
+    display: none;
+  }
+}
+
+
 
 </style>
